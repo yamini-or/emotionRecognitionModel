@@ -7,7 +7,7 @@
     <artifactId>emotion-upload-ui</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>emotion-upload-ui</name>
+    <name>Emotion-upload-ui</name>
 
     <properties>
         <jdk.version>1.8</jdk.version>
