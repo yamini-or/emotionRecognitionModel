@@ -1,9 +1,9 @@
-package com.mkyong;
+package com;
 
 import java.util.Properties;
 import javax.sql.DataSource;
-import main.java.com.mykong.dao.VideoDAO;
-import main.java.com.mykong.dao.VideoDAOImpl;
+import main.java.com.dao.VideoDAO;
+import main.java.com.dao.VideoDAOImpl;
 
 
 import org.hibernate.SessionFactory;
@@ -30,7 +30,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({"com.mkyong"})
+@ComponentScan({"com"})
 @PropertySource(value = { "classpath:application.properties" })
 public class SpringWebMvcConfig extends WebMvcConfigurerAdapter {
 
@@ -57,7 +57,7 @@ public class SpringWebMvcConfig extends WebMvcConfigurerAdapter {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan(new String[] { "com.mykong" });
+        sessionFactory.setPackagesToScan(new String[] { "com" });
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
      }

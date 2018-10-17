@@ -1,7 +1,7 @@
-package main.java.com.mykong.dao;
+package main.java.com.dao;
 
 import java.util.List;
-import main.java.com.mykong.model.Video;
+import main.java.com.model.Video;
 /**
  * Defines DAO operations for the video upload model.
  *

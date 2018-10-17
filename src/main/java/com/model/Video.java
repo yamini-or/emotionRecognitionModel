@@ -1,4 +1,4 @@
-package main.java.com.mykong.model;
+package main.java.com.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

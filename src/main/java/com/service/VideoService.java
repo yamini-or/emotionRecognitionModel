@@ -1,7 +1,7 @@
-package main.java.com.mykong.service;
+package main.java.com.service;
 
 import java.util.List;
-import main.java.com.mykong.model.Video;
+import main.java.com.model.Video;
 
 
 public interface VideoService {

@@ -1,4 +1,4 @@
-package main.java.com.mykong.service;
+package main.java.com.service;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import main.java.com.mykong.dao.VideoDAO;
-import main.java.com.mykong.model.Video;
+import main.java.com.dao.VideoDAO;
+import main.java.com.model.Video;
 
 
 /**

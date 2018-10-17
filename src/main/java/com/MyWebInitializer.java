@@ -1,4 +1,4 @@
-package com.mkyong;
+package com;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

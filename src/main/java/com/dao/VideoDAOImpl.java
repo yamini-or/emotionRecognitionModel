@@ -1,4 +1,4 @@
-package main.java.com.mykong.dao;
+package main.java.com.dao;
 
 import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -10,7 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import main.java.com.mykong.model.Video;
+import main.java.com.model.Video;
 
 
 /**
