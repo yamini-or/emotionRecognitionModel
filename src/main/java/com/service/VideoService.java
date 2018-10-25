@@ -5,10 +5,10 @@ import main.java.com.model.Video;
 
 
 public interface VideoService {
-
+	/*
    long save(Video video);
    Video get(long id);
    List<Video> list();
    void update(long id, Video video);
-   void delete(long id);
+   void delete(long id);*/
 }

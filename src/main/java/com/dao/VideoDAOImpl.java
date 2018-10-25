@@ -1,67 +1,122 @@
 package main.java.com.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
 
 import main.java.com.model.Video;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 /**
  * An implementation of the VideoDAO interface.
  *
  */
 
-@Repository("videoDao")
 public class VideoDAOImpl implements VideoDAO{
 
-   @Autowired
-   private SessionFactory sessionFactory;
-
-   @Override
-   public long save(Video video) {
-      sessionFactory.getCurrentSession().save(video);
-      return video.getId();
-   }
-
-   @Override
-   public Video get(long id) {
-      return sessionFactory.getCurrentSession().get(Video.class, id);
+   private JdbcTemplate jdbcTemplate;
+   
+   public VideoDAOImpl(DataSource dataSource) {
+      jdbcTemplate = new JdbcTemplate(dataSource);
    }
 
    @Override
    public List<Video> list() {
-      Session session = sessionFactory.getCurrentSession();
-      CriteriaBuilder cb = session.getCriteriaBuilder();
-      CriteriaQuery<Video> cq = cb.createQuery(Video.class);
-      Root<Video> root = cq.from(Video.class);
-      cq.select(root);
-      Query<Video> query = session.createQuery(cq);
-      return query.getResultList();
+      String sql = "SELECT * FROM VIDEO";
+      List<Video> listVideo = jdbcTemplate.query(sql, new RowMapper<Video>() {
+
+         @Override
+         public Video mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Video aVideo = new Video();
+   
+            aVideo.setId(rs.getInt("id"));
+            aVideo.setTitle(rs.getString("title"));
+            aVideo.setLink(rs.getString("link"));
+            aVideo.setRecruiter(rs.getString("recruiter"));
+            aVideo.setCandidate(rs.getString("candidate"));
+            aVideo.setFaceCount(rs.getInt("faceCount"));
+            aVideo.setNeutral(rs.getInt("neutral"));
+            aVideo.setAnger(rs.getInt("anger"));
+            aVideo.setDisgust(rs.getInt("disgust"));
+            aVideo.setHappy(rs.getInt("happy"));
+            aVideo.setSurprise(rs.getInt("surprise"));
+            aVideo.setComments(rs.getString("comments"));
+            
+            return aVideo;
+         }
+         
+      });
+      
+      return listVideo;
    }
 
    @Override
-   public void update(long id, Video video) {
-      Session session = sessionFactory.getCurrentSession();
-      Video video2 = session.byId(Video.class).load(id);
-      video2.setTitle(video.getTitle());
-      video2.setEmotionCount(video.getEmotionCount());
-      session.flush();
+   public void save (Video video) {
+      String sql = "INSERT INTO VIDEO (Title, Link, Recruiter, Candidate, FaceCount, Neutral, Anger, Disgust, Happy, Surprise, Comments)"
+                  + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+         jdbcTemplate.update(sql, video.getTitle(), video.getLink(), video.getRecruiter(), video.getCandidate(), video.getFaceCount(), 
+            video.getNeutral(), video.getAnger(), video.getDisgust(), video.getHappy(), video.getSurprise(), video.getComments());
+
    }
 
    @Override
-   public void delete(long id) {
-      Session session = sessionFactory.getCurrentSession();
-      Video video = session.byId(Video.class).load(id);
-      session.delete(video);
+   public void update (String video, int[] emotionList) {
+      if (video != null && !video.isEmpty()) {
+         int sum = 0;
+        for(int i=0;i<emotionList.length;i++)
+            sum += emotionList[i];
+         String sql = "UPDATE video SET FaceCount=?, Neutral=?, Anger=?, Disgust=?, Happy=?, Surprise=? "
+                  + "WHERE link=?";
+         jdbcTemplate.update(sql, sum, emotionList[0], emotionList[1], emotionList[2], emotionList[3], emotionList[4], video);
+      } 
    }
 
+   @Override
+   public Video get(String link) {
+      String sql = "SELECT * FROM video WHERE link = ?";
+      return jdbcTemplate.query(sql, new Object[] { link }, new ResultSetExtractor<Video>() {
 
+         @Override
+         public Video extractData(ResultSet rs) throws SQLException,
+               DataAccessException {
+            if (rs.next()) {
+               Video aVideo = new Video();
+               aVideo.setId(rs.getInt("id"));
+               aVideo.setTitle(rs.getString("title"));
+               aVideo.setLink(rs.getString("link"));
+               aVideo.setRecruiter(rs.getString("recruiter"));
+               aVideo.setCandidate(rs.getString("candidate"));
+               aVideo.setFaceCount(rs.getInt("faceCount"));
+               aVideo.setNeutral(rs.getInt("neutral"));
+               aVideo.setAnger(rs.getInt("anger"));
+               aVideo.setDisgust(rs.getInt("disgust"));
+               aVideo.setHappy(rs.getInt("happy"));
+               aVideo.setSurprise(rs.getInt("surprise"));
+               aVideo.setComments(rs.getString("comments"));
+
+               return aVideo;
+            }
+            
+            return null;
+         }
+         
+      });
+   }
+
+   @Override
+   public void updateComments (String video, String comments) {
+         if (video != null && !video.isEmpty()) {
+         System.out.println("**** in videoDAO");
+         String sql = "UPDATE video SET Comments=? "
+                  + " WHERE link=?";
+         jdbcTemplate.update(sql, comments, video);
+      } 
+   }
 }
 

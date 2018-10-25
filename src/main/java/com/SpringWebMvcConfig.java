@@ -50,10 +50,26 @@ public class SpringWebMvcConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
-    @Autowired
-    private Environment environment;
- 
     @Bean
+    public DataSource getDataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:tcp://localhost/~/test");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
+        
+        return dataSource;
+    }
+    
+    @Bean
+    public VideoDAO getVideoDAO() {
+        return new VideoDAOImpl(getDataSource());
+    }
+
+    //@Autowired
+    //private Environment environment;
+ 
+    /*@Bean
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -68,7 +84,8 @@ public class SpringWebMvcConfig extends WebMvcConfigurerAdapter {
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
         dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
-        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        //dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
+        dataSource.setPassword("");
         return dataSource;
     }
      
@@ -86,7 +103,7 @@ public class SpringWebMvcConfig extends WebMvcConfigurerAdapter {
        HibernateTransactionManager txManager = new HibernateTransactionManager();
        txManager.setSessionFactory(s);
        return txManager;
-    }
+    }*/
     /*@Bean(name = "multipartResolver")
     public CommonsMultipartResolver multipartResolver() {
 

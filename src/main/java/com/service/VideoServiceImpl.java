@@ -18,7 +18,7 @@ import main.java.com.model.Video;
 @Service
 @Transactional(readOnly = true)
 public class VideoServiceImpl implements VideoService {
-
+/*
    @Autowired
    private VideoDAO videoDao;
 
@@ -49,5 +49,5 @@ public class VideoServiceImpl implements VideoService {
    public void delete(long id) {
       videoDao.delete(id);
    }
-
+*/
 }

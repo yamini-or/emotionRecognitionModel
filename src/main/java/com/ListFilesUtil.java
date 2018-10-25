@@ -3,6 +3,7 @@ package main.java.com.myFile;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.activation.MimetypesFileTypeMap;
 
 
 public class ListFilesUtil {
@@ -33,6 +34,15 @@ public class ListFilesUtil {
         return isVideo;    
     }
 
+    public static boolean isImageCheck(File file) {
+        String mimeType = new MimetypesFileTypeMap().getContentType(file);
+        // mimeType should now be something like "image/png"
+
+        if(mimeType.substring(0,5).equalsIgnoreCase("image"))
+            return true;
+        return false;
+    }
+
 	public String listFiles(String directoryName){
 		System.out.println("Inside list files******");
 
@@ -42,7 +52,7 @@ public class ListFilesUtil {
         File[] fList = directory.listFiles();
         int countOfVideos = 0;
         for (File file : fList){
-            if (file.isFile() && isVideoCheck(file)){
+            if (file.isFile() && (isVideoCheck(file) || isImageCheck(file) )){
                 countOfVideos++;
                 System.out.println(file.getName()); 
                 if (countOfVideos == 1)      
